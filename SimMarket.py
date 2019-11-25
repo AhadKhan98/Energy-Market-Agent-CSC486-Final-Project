@@ -42,9 +42,12 @@ class Server():
                 a = b.post_asks()
                 asks.extend( a )
                 asks_by_broker[b.idx] = a
+<<<<<<< HEAD
             print(asks)
             
 
+=======
+>>>>>>> 427a21f32565980d48763893a14318d125a34151
             ## Get bids from producers
             ## Clear market
             ## Distribute energy to brokers
@@ -104,7 +107,7 @@ class Server():
         total_asked = 0
         total_bidded = 0
         i, j = 0, 0
-        
+
         while True:
             if total_asked < total_bidded:
                 total_asked += asks[i][1]
@@ -121,13 +124,13 @@ class Server():
                 price = bids[j - 1][0]
                 quantity = total_asked
                 break
-        
+
         return price, quantity
 
     def read_initial_data( self ):
         customer_usage = dict()
         other_data = dict()
-        
+
         f = open( 'CustomerNums.csv', 'r' )
         raw = [i[:-1].split(',')[1:] for i in f.readlines()[1:]]
         for i in range(1, len(raw) + 1):

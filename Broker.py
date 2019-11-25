@@ -38,7 +38,7 @@ class Broker():
         print(Usage_for_c_5 )
 
     ## Returns a list of asks of the form ( price, quantity ).
-    def post_asks( self ):        
+    def post_asks( self ):
         return [ (i,100) for i in range(1,101) ]
 
     ## Returns a list of Tariff objects.
@@ -48,7 +48,7 @@ class Broker():
     ## Receives data for the last time period from the server.
     def receive_message( self, msg ):
         pass
-        
+
     ## Returns a negative number if the broker doesn't have enough energy to
     ## meet demand.  Returns a positive number otherwise.
     def get_energy_imbalance( self, data ):
