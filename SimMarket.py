@@ -19,7 +19,7 @@ class Server():
         ## You need to initialize a Broker here (change the name in the
         ## imports at the top to reflect your broker's name), and then
         ## put it in the list self.brokers.
-        self.brokers   = []
+        self.brokers   = [Broker(1)]
         self.customers = [ Customer() for i in range(100) ]
         self.tariffs   = [ self.DT ]
 
@@ -42,7 +42,6 @@ class Server():
                 a = b.post_asks()
                 asks.extend( a )
                 asks_by_broker[b.idx] = a
-
             ## Get bids from producers
             ## Clear market
             ## Distribute energy to brokers
@@ -102,7 +101,7 @@ class Server():
         total_asked = 0
         total_bidded = 0
         i, j = 0, 0
-        
+
         while True:
             if total_asked < total_bidded:
                 total_asked += asks[i][1]
@@ -119,13 +118,13 @@ class Server():
                 price = bids[j - 1][0]
                 quantity = total_asked
                 break
-        
+
         return price, quantity
 
     def read_initial_data( self ):
         customer_usage = dict()
         other_data = dict()
-        
+
         f = open( 'CustomerNums.csv', 'r' )
         raw = [i[:-1].split(',')[1:] for i in f.readlines()[1:]]
         for i in range(1, len(raw) + 1):
