@@ -19,7 +19,7 @@ class Server():
         ## You need to initialize a Broker here (change the name in the
         ## imports at the top to reflect your broker's name), and then
         ## put it in the list self.brokers.
-        self.brokers   = []
+        self.brokers   = [Broker(1)]
         self.customers = [ Customer() for i in range(100) ]
         self.tariffs   = [ self.DT ]
 
@@ -42,6 +42,8 @@ class Server():
                 a = b.post_asks()
                 asks.extend( a )
                 asks_by_broker[b.idx] = a
+            print(asks)
+            
 
             ## Get bids from producers
             ## Clear market

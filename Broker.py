@@ -33,6 +33,9 @@ class Broker():
 
         self.usage = usage_data
         self.other = other_data
+        
+        usage_for_c_5 = usage_data[5]
+        print(Usage_for_c_5 )
 
     ## Returns a list of asks of the form ( price, quantity ).
     def post_asks( self ):        
