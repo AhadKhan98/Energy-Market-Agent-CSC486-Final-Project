@@ -1,5 +1,6 @@
 from Tariff import Tariff
 import csv
+import random
 
 class Broker():
 
@@ -40,20 +41,139 @@ class Broker():
 
     ## Returns a list of asks of the form ( price, quantity ).
     def post_asks( self ):
-        return [ (i,100) for i in range(1,101) ]
+
+        # Read past usage data
+        past_data = {
+        'Total Demand':[2427.584722,3133.841605,3305.694804],
+        'Cleared Price':[41,39,44],
+        'Cleared Quantity':[5400,6000,5500],
+        'Difference':[2427.584722,3133.841605,3305.694804]}
+
+        # Calculate the ask from the variables
+        asks = []
+
+        # Get average price and demand for all periods
+        avg_price = sum(past_data['Cleared Price'])/len(past_data['Cleared Price'])
+        avg_demand = sum(past_data['Total Demand'])/len(past_data['Total Demand'])
+
+        # Iterate through all the periods to set asks
+        for i in range(len(past_data['Total Demand'])):
+
+            # Calculating price
+            current_price = past_data['Cleared Price'][i]
+            current_demand = past_data['Total Demand'][i]
+
+            percent_difference = (current_demand/avg_demand)*100-100 # How much smaller or larger current demand is compared to avg demand
+
+            if percent_difference < 0: # If current demand < avg demand
+                # 0 - 25 percent smaller
+                if abs(percent_difference) > 0 and abs(percent_difference) <= 25:
+                    current_price -= random.randint(0,5)
+                # 25 - 50 percent smaller
+                elif abs(percent_difference) > 25 and abs(percent_difference) <= 50:
+                    current_price -= random.randint(5,10)
+                # 50 - 75 percent smaller
+                elif abs(percent_difference) > 50 and abs(percent_difference) <= 75:
+                    current_price -= random.randint(10,15)
+                # 75+ percent smaller
+                else:
+                    current_price -= random.randint(15,20)
+            else: # If current demand > avg demand
+                if abs(percent_difference) > 0 and abs(percent_difference) <= 25:
+                    current_price += random.randint(0,5)
+                elif abs(percent_difference) > 25 and abs(percent_difference) <= 50:
+                    current_price += random.randint(5,10)
+                elif abs(percent_difference) > 50 and abs(percent_difference) <= 75:
+                    current_price += random.randint(10,15)
+                else:
+                    current_price += random.randint(15,20)
+
+
+            # Calculating Quantity
+            quantity = (past_data['Cleared Quantity'][i] + past_data['Difference'][i] + past_data['Total Demand'][i])/3
+            add_or_remove = random.randint(0,1) # Decides whether to add or remove from quantity
+            add_or_remove_quantity = random.randint(0,500)
+            if add_or_remove == 0:
+                quantity -= add_or_remove_quantity
+            else:
+                quantity += add_or_remove_quantity
+
+            # Append to final output
+            asks.append((current_price,quantity))
+
+        print(asks)
+        return asks
+
+
+
+
 
     ## Returns a list of Tariff objects.
     
     def post_tariffs( self ):
-    #     f = open('GenCos.csv', 'r')
-    #     print(f.name)
-    #     f.close()
-    
-     with open('OtherData.csv', 'r') as f: 
-            for line in f: 
-                print(line, end = '')
+        # f = open('OtherData.csv', 'r')
+        # reader = csv.reader(f)
+        # other_data = []
+        # for column in reader: 
+        #     other_data.append[column]
+        # print('this is our other data')
+        # for item in other_data:
+        #     print(item)
         
-            return [Tariff( self.idx, price=100, duration=3, exitfee=0 )]
+        # f.close()
+
+        # with open('OtherData.csv', 'r') as f: 
+        #         for line in f: 
+        #             print(line, end = '')
+        # Read past usage data
+        # past_data = {
+        # 'Total Demand':[2427.584722,3133.841605,3305.694804],
+        # 'Cleared Price':[41,39,44],
+        # 'Cleared Quantity':[5400,6000,5500],
+        # 'Difference':[2427.584722,3133.841605,3305.694804]}
+
+        # # Calculate the ask from the variables
+        # tariff = []
+
+        # # Get average price and demand for all periods
+        # avg_price = sum(past_data['Cleared Price'])/len(past_data['Cleared Price'])
+        # avg_demand = sum(past_data['Total Demand'])/len(past_data['Total Demand'])
+
+        # # Iterate through all the periods to set asks
+        # for i in range(len(past_data['Total Demand'])):
+
+        #     # Calculating price
+        #     current_price = past_data['Cleared Price'][i]
+        #     current_demand = past_data['Total Demand'][i]
+
+        #     percent_difference = (current_demand/avg_demand)*100-100 # How much smaller or larger current demand is compared to avg demand
+
+        #     if percent_difference < 0: # If current demand > avg demand
+        #         # 25 - 50 percent larger
+        #         if abs(percent_difference) > 25 and abs(percent_difference) >= 50:
+        #             current_price -= random.randint(5,10)
+        #         # 50 - 75cp rcent larger
+        #         elif abs(percent_difference) > 50 and abs(percent_difference) >= 75:
+        #             current_price -= random.randint(10,15)
+        #         # 50 - 75 percent larger
+        #         elif abs(percent_difference) > 80 and abs(percent_difference) >= 100:
+        #             current_price -= random.randint(15,20)
+        #         # 100+ percent larger
+        #         else:
+        #             current_price -= random.randint(20,25)
+        #     else: # If current demand > avg demand
+        #         if abs(percent_difference) > 0 and abs(percent_difference) <= 25:
+        #             current_price += random.randint(0,5)
+        #         elif abs(percent_difference) > 25 and abs(percent_difference) <= 50:
+        #             current_price += random.randint(5,10)
+        #         elif abs(percent_difference) > 50 and abs(percent_difference) <= 75:
+        #             current_price += random.randint(10,15)
+        #         else:
+        #             current_price += random.randint(15,20)
+
+        print(tariff)
+        return [Tariff.append(self.idx,current_price, duration=3, exitfee=0 )]
+        
 
     ## Receives data for the last time period from the server.
     def receive_message( self, msg ):
@@ -72,3 +192,6 @@ class Broker():
     ## Alter broker's cash balance based on supply/demand match.
     def adjust_cash( self, amt ):
         self.cash += amt
+
+b= Broker(1)
+b.post_asks()
