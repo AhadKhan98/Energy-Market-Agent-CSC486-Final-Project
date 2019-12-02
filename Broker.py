@@ -86,7 +86,7 @@ class Broker():
 
 
             # Calculating Quantity
-            quantity = (past_data['Cleared Quantity'][i] + past_data['Difference'][i] + past_data['Total Demand'][i])/3
+            quantity = int((past_data['Cleared Quantity'][i] + past_data['Difference'][i] + past_data['Total Demand'][i])/3)
             add_or_remove = random.randint(0,1) # Decides whether to add or remove from quantity
             add_or_remove_quantity = random.randint(0,500)
             if add_or_remove == 0:
@@ -98,6 +98,7 @@ class Broker():
             asks.append((current_price,quantity))
 
         print(asks)
+        return asks
 
 
 
