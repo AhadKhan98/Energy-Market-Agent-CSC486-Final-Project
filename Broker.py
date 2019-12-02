@@ -32,8 +32,30 @@ class Broker():
     ##                 quantities and actual usage.
     def get_initial_data( self, usage_data, other_data ):
 
-        self.usage = usage_data
+        # self.usage = usage_data
+        # self.other = other_data
+        # # f = open('CustomerNums.csv', 'r')
+        # # print(f.readlines()[0])
+        # # f.close()
+        # # print(self.usage)
+        customer_usage = dict()
+        other_data = dict()
+
+        f = open( 'CustomerNums.csv', 'r' )
+        raw = [i[:-1].split(',')[1:] for i in f.readlines()[1:]]
+        for i in range(1, len(raw) + 1):
+            customer_usage[i] = [ float(dat) for dat in raw[i-1] ]
+        f.close()
+
+        f = open( 'OtherData.csv' )
+        raw = [i[:-1].split(',')[1:] for i in f.readlines()[1:]]
+        other_data['Cleared Price'] = [float(dat) for dat in raw[0]]
+        other_data['Cleared Quantity'] = [float(dat) for dat in raw[1]]
+        other_data['Difference'] = [float(dat) for dat in raw[2]]
+        other_data['Total Demand'] = [float(dat) for dat in raw[3]]
+        self.usage = customer_usage
         self.other = other_data
+        print(other_data['Cleared Price'])
 
     ## Returns a list of asks of the form ( price, quantity ).
     def post_asks( self ):
@@ -46,7 +68,7 @@ class Broker():
         'Difference':[2427.584722,3133.841605,3305.694804]}
 
         # Calculate the ask from the variables
-        asks = []
+        asks = self.asks
 
         # Get average price and demand for all periods
         avg_price = sum(past_data['Cleared Price'])/len(past_data['Cleared Price'])
@@ -97,7 +119,7 @@ class Broker():
             # Append to final output
             asks.append((current_price,quantity))
 
-        print(asks)
+        self.asks = asks
         return asks
 
 
@@ -106,7 +128,13 @@ class Broker():
 
     ## Returns a list of Tariff objects.
     def post_tariffs( self ):
-        return [Tariff( self.idx, price=100, duration=3, exitfee=0 )]
+        prices = []
+        for element in self.asks:
+            prices += [element[0]]
+        avg_price = int(sum(prices)/len(prices))
+        price = avg_price + random.randint(40,50)
+        print(price)
+        return [Tariff( self.idx, price=price, duration=12, exitfee=random.randint(10,20))]
 
     ## Receives data for the last time period from the server.
     def receive_message( self, msg ):
@@ -125,6 +153,7 @@ class Broker():
     ## Alter broker's cash balance based on supply/demand match.
     def adjust_cash( self, amt ):
         self.cash += amt
-
-b= Broker(1)
-b.post_asks()
+#
+# b= Broker(1)
+# b.post_asks()
+# b.post_tariffs()
