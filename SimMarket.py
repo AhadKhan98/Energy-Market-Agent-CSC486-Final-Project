@@ -1,5 +1,6 @@
 import math
 import random
+import csv
 
 from functions import *
 from Broker import Broker
@@ -22,7 +23,6 @@ class Server():
         self.brokers   = [Broker(1)]
         self.customers = [ Customer() for i in range(100) ]
         self.tariffs   = [ self.DT ]
-
         self.run()
 
     def run( self ):
@@ -42,12 +42,9 @@ class Server():
                 a = b.post_asks()
                 asks.extend( a )
                 asks_by_broker[b.idx] = a
-<<<<<<< HEAD
             print(asks)
             
 
-=======
->>>>>>> 427a21f32565980d48763893a14318d125a34151
             ## Get bids from producers
             ## Clear market
             ## Distribute energy to brokers
@@ -143,8 +140,9 @@ class Server():
         other_data['Cleared Quantity'] = [float(dat) for dat in raw[1]]
         other_data['Difference'] = [float(dat) for dat in raw[2]]
         other_data['Total Demand'] = [float(dat) for dat in raw[3]]
-
+        #print(customer_usage)
         return customer_usage, other_data
+        
 
     def get_bids( self ):
 

@@ -1,4 +1,5 @@
 from Tariff import Tariff
+import csv
 
 class Broker():
 
@@ -20,6 +21,7 @@ class Broker():
         self.asks      = []
         self.tariffs   = []
         self.customers = []
+    
 
     ## A function to accept the bootstrap data set.  The data set contains:
     ##     usage_data, a dict in which keys are integer customer ID numbers,
@@ -33,17 +35,25 @@ class Broker():
 
         self.usage = usage_data
         self.other = other_data
-        
         usage_for_c_5 = usage_data[5]
-        print(Usage_for_c_5 )
+        print(usage_for_c_5)
 
     ## Returns a list of asks of the form ( price, quantity ).
     def post_asks( self ):
         return [ (i,100) for i in range(1,101) ]
 
     ## Returns a list of Tariff objects.
+    
     def post_tariffs( self ):
-        return [Tariff( self.idx, price=100, duration=3, exitfee=0 )]
+    #     f = open('GenCos.csv', 'r')
+    #     print(f.name)
+    #     f.close()
+    
+     with open('OtherData.csv', 'r') as f: 
+            for line in f: 
+                print(line, end = '')
+        
+            return [Tariff( self.idx, price=100, duration=3, exitfee=0 )]
 
     ## Receives data for the last time period from the server.
     def receive_message( self, msg ):
