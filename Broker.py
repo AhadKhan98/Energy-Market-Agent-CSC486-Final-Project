@@ -32,12 +32,7 @@ class Broker():
     ##                 quantities and actual usage.
     def get_initial_data( self, usage_data, other_data ):
 
-        # self.usage = usage_data
-        # self.other = other_data
-        # # f = open('CustomerNums.csv', 'r')
-        # # print(f.readlines()[0])
-        # # f.close()
-        # # print(self.usage)
+
         customer_usage = dict()
         other_data = dict()
 
@@ -55,17 +50,12 @@ class Broker():
         other_data['Total Demand'] = [float(dat) for dat in raw[3]]
         self.usage = customer_usage
         self.other = other_data
-        print(other_data['Cleared Price'])
 
     ## Returns a list of asks of the form ( price, quantity ).
     def post_asks( self ):
 
         # Read past usage data
-        past_data = {
-        'Total Demand':[2427.584722,3133.841605,3305.694804],
-        'Cleared Price':[41,39,44],
-        'Cleared Quantity':[5400,6000,5500],
-        'Difference':[2427.584722,3133.841605,3305.694804]}
+        past_data = self.other
 
         # Calculate the ask from the variables
         asks = self.asks
@@ -133,7 +123,6 @@ class Broker():
             prices += [element[0]]
         avg_price = int(sum(prices)/len(prices))
         price = avg_price + random.randint(40,50)
-        print(price)
         return [Tariff( self.idx, price=price, duration=12, exitfee=random.randint(10,20))]
 
     ## Receives data for the last time period from the server.
@@ -153,7 +142,3 @@ class Broker():
     ## Alter broker's cash balance based on supply/demand match.
     def adjust_cash( self, amt ):
         self.cash += amt
-#
-# b= Broker(1)
-# b.post_asks()
-# b.post_tariffs()
