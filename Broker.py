@@ -57,7 +57,7 @@ class Broker():
         other_data['Total Demand'] = [float(dat) for dat in raw[3]]
         self.usage = customer_usage
         self.other = other_data
-        print(other_data['Cleared Price'])
+        #print(other_data['Cleared Price'])
 
     ## Returns a list of asks of the form ( price, quantity ).
     def post_asks( self ):
@@ -136,9 +136,11 @@ class Broker():
             prices += [element[0]]
         avg_price = int(sum(prices)/len(prices))
         price = avg_price + random.randint(40,50)
-        print(price)
-        return [Tariff( self.idx, price=price, duration=12, exitfee=random.randint(10,20))]
-
+        exitfee = price + random.randint(10,20)
+        #print(price)
+        #print(exitfee)
+        return [Tariff( self.idx, price=price, duration=12, exitfee= exitfee)]
+      
     ## Receives data for the last time period from the server.
     def receive_message( self, msg ):
         pass
@@ -157,6 +159,7 @@ class Broker():
     def adjust_cash( self, amt ):
         self.cash += amt
 #
-# b= Broker(1)
-# b.post_asks()
-# b.post_tariffs()
+b= Broker(1)
+b.post_asks()
+b.post_tariffs()
+#print(b.post_tariffs())
